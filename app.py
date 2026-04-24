@@ -52,8 +52,8 @@ if st.button("Calcular melhor opção"):
 
         # normalizar valores (esla comparavel)
         
-        custos_norm =(custos - np.min(custos)) / (np.max(custos) if np.min(custos)) != np.min(custos) else custos
-        tempos_norm =(tempos - np.min(tempos)) / (np.max(tmepos) if np.min(tempos)) != np.min(tempos) else tempos
+        custos_norm = (custos - np.min(custos)) / (np.max(custos) - np.min(custos)) if np.max(custos) != np.min(custos) else custos
+        tempos_norm = (tempos - np.min(tempos)) / (np.max(tempos) - np.min(tempos)) if np.max(tempos) != np.min(tempos) else tempos
 
         #inverter (quanto menor melhor)
         custos_norm = 1 - custos_norm
