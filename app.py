@@ -55,7 +55,7 @@ if st.button("Calcular melhor opção"):
         custos_norm = custos / np.max(custos)
         tempos_norm = tempo / np.max(tempos)
 
-        vantagens = custos_norm * peso_custo + tempo_norm * peso_tempo
+        vantagens = custos_norm * peso_custo + tempos_norm * peso_tempo
 
         melhor_idx = np.argmin(vantagens)
 
