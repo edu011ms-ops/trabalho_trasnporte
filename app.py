@@ -1,5 +1,3 @@
-app.py + requirements.txt
-
 # transport_app
 import streamlit as st
 import numpy as np
