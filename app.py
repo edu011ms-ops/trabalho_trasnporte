@@ -27,9 +27,19 @@ for t in transportes:
         dados[t] = {"tempo": tempo, "custo": custo_total}
 
 # Preferência do usuário
-st.subheader("Preferência do usuário")
-peso_custo = st.slider("Importância do custo", 0.0, 1.0, 0.6)
-peso_tempo = 1 - peso_custo
+st.subheader("Preferência do usuário)
+
+peso_custo = st.slider("Importância do custo", 0.0, 10.0, 6.0)
+peso_tempo = st.slider("Importância do tempo", 0.0, 10.0, 4.0)
+
+#normalização (garante que somam 1)
+total = peso_custo + peso_tempo
+
+if total == 0:
+    st.warning("Escolaha pelo menos uma prefêrencia")
+else:
+    peso_custo /= total
+    peso_tempo /= total
 
 if st.button("Calcular melhor opção"):
     
@@ -40,7 +50,12 @@ if st.button("Calcular melhor opção"):
         custos = np.array([dados[n]["custo"] for n in nomes])
         tempos = np.array([dados[n]["tempo"] for n in nomes])
 
-        vantagens = custos * peso_custo + tempos * peso_tempo
+        # normalizar valores (esla comparavel)
+        
+        custos_norm = custos / np.max(custos)
+        tempos_norm = tempo / np.max(tempos)
+
+        vantagens = custos_norm * peso_custo + tempo_norm * peso_tempo
 
         melhor_idx = np.argmin(vantagens)
 
