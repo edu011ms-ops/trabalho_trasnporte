@@ -1,60 +1,56 @@
-import streamlit as st
+import streamlit as st 
 import numpy as np
 import matplotlib.pyplot as plt
 
-st.title("Calculadora de Transporte Mais Vantajoso")
+st.title("🚗 Calculadora de Transporte Mais Vantajoso")
 
-# Distância
+# 🆕 Distância
 distancia = st.number_input("Distância até o destino (km)", min_value=1.0, value=5.0)
 
-# Dados base (velocidade km/h e custo por km)
-transportes = {
-    "ônibus": {"velocidade": 40, "custo_km": 0.5},
-    "carro": {"velocidade": 60, "custo_km": 1.2},
-    "bicicleta": {"velocidade": 15, "custo_km": 0},
-    "uber": {"velocidade": 50, "custo_km": 2.0}
-}
+# Entrada do usuário
+transportes = ["ônibus", "carro", "bicicleta", "uber"]
 
-nomes = list(transportes.keys())
+dados = {}
 
-tempos = []
-custos = []
+st.subheader("Insira os dados:")
 
-for t in nomes:
-    vel = transportes[t]["velocidade"]
-    custo_km = transportes[t]["custo_km"]
+for t in transportes:
+    st.write(f"### {t}")
+    tempo = st.number_input(f"Tempo (min) - {t}", min_value=0, key=t+"tempo")
+    custo = st.number_input(f"Custo base (R$) - {t}", min_value=0.0, key=t+"custo")
+    
+    # 🆕 ajustando custo pela distância
+    custo_total = custo * distancia
+    
+    dados[t] = {"tempo": tempo, "custo": custo_total}
 
-    tempo = (distancia / vel) * 60  # minutos
-    custo = distancia * custo_km
-
-    tempos.append(tempo)
-    custos.append(custo)
-
-tempos = np.array(tempos)
-custos = np.array(custos)
-
-# Preferência do usuário
+# Peso personalizado
+st.subheader("Preferência do usuário")
 peso_custo = st.slider("Importância do custo", 0.0, 1.0, 0.6)
 peso_tempo = 1 - peso_custo
 
-vantagens = custos * peso_custo + tempos * peso_tempo
+if st.button("Calcular melhor opção"):
+    nomes = list(dados.keys())
+    custos = np.array([dados[n]["custo"] for n in nomes])
+    tempos = np.array([dados[n]["tempo"] for n in nomes])
 
-melhor_idx = np.argmin(vantagens)
+    vantagens = custos * peso_custo + tempos * peso_tempo
 
-st.success(f"Melhor opção: {nomes[melhor_idx]}")
+    melhor_idx = np.argmin(vantagens)
 
-# Gráfico
-fig, ax = plt.subplots()
-ax.scatter(tempos, custos)
+    st.success(f"Melhor opção: {nomes[melhor_idx]}")
 
-# destacar melhor opção
-ax.scatter(tempos[melhor_idx], custos[melhor_idx], s=200)
+    # Gráfico
+    fig, ax = plt.subplots()
+    ax.scatter(tempos, custos)
 
-for i in range(len(nomes)):
-    ax.text(tempos[i], custos[i], nomes[i])
+    # destacar melhor
+    ax.scatter(tempos[melhor_idx], custos[melhor_idx], s=200)
 
-ax.set_xlabel("Tempo (min)")
-ax.set_ylabel("Custo (R$)")
-ax.set_title("Comparação de Transporte")
+    for i in range(len(nomes)):
+        ax.text(tempos[i], custos[i], nomes[i])
 
-st.pyplot(fig)
+    ax.set_xlabel("Tempo")
+    ax.set_ylabel("Custo")
+
+    st.pyplot(fig)
