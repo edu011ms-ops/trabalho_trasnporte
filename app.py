@@ -27,7 +27,7 @@ for t in transportes:
         dados[t] = {"tempo": tempo, "custo": custo_total}
 
 # Preferência do usuário
-st.subheader("Preferência do usuário)
+st.subheader("Preferência do usuário")
 
 peso_custo = st.slider("Importância do custo", 0.0, 10.0, 6.0)
 peso_tempo = st.slider("Importância do tempo", 0.0, 10.0, 4.0)
