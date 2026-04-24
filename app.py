@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 
-st.title("🚗 Calculadora de Transporte Mais Vantajoso")
+st.title("Calculadora de Transporte Mais Vantajoso")
 
 # Distância
 distancia = st.number_input("Distância até o destino (km)", min_value=1.0, value=5.0)
